@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import HandCell from './components/HandCell';
+import HandCell from './components/HandCell'; // Assuming the HandCell component is in HandCell.jsx
 import hands from './utils/hands'; // Import hands array
+
+const TOTAL_COMBOS = 1326; // Total combos in the range
 
 function App() {
   document.title = 'Poker hand visualizer';
@@ -14,7 +16,7 @@ function App() {
   const [label1, setLabel1] = useState('Color 1');
   const [label2, setLabel2] = useState('Color 2');
 
-  // Calculate total selected combos for a specific color
+  // Helper function to calculate the total combos for a specific color
   const calculateCombosForColor = (color) => {
     let totalCombos = 0;
 
@@ -23,16 +25,18 @@ function App() {
       const percentage = color === 'color1' ? parseInt(proportion1, 10) : parseInt(proportion2, 10);
 
       // Calculate combos based on hand type
-      if (hand.endsWith('o')) {
-        totalCombos += 12 * (percentage / 100); // Offsuit hands
-      } else if (hand.endsWith('s')) {
-        totalCombos += 4 * (percentage / 100); // Suited hands
-      } else {
-        totalCombos += 6 * (percentage / 100); // Pairs
+      if (hand.endsWith('o')) { // Offsuit hands (e.g., "XXo")
+        totalCombos += 12 * (percentage / 100); // 12 combos for each offsuit hand
+      } else if (hand.endsWith('s')) { // Suited hands (e.g., "XXs")
+        totalCombos += 4 * (percentage / 100); // 4 combos for each suited hand
+      } else { // Pairs (e.g., "AA")
+        totalCombos += 6 * (percentage / 100); // 6 combos for each pair hand
       }
     }
 
-    return totalCombos.toFixed(1); // Round to 1 decimal for clarity
+    // Calculate percentage of the total range (1326 combos)
+    const percentageOfRange = ((totalCombos / TOTAL_COMBOS) * 100).toFixed(2); // Round to 2 decimal places
+    return { totalCombos: totalCombos.toFixed(2), percentageOfRange };
   };
 
   // Handle hand selection
@@ -58,6 +62,10 @@ function App() {
     setColorSettings(updatedColorSettings);
   };
 
+  // Calculate combos for Color 1 and Color 2
+  const { totalCombos: totalCombos1, percentageOfRange: percentRange1 } = calculateCombosForColor('color1');
+  const { totalCombos: totalCombos2, percentageOfRange: percentRange2 } = calculateCombosForColor('color2');
+
   return (
     <div className="flex">
       {/* Hand grid */}
@@ -79,7 +87,9 @@ function App() {
 
         {/* Combo Counter for Color 1 */}
         <div className="mb-4 p-2 border border-gray-200 rounded bg-gray-50">
-          <strong>Total Combos for {label1}:</strong> {calculateCombosForColor('color1')}
+          <strong>Total Combos for {label1}:</strong> {totalCombos1} combos
+          <br />
+          <strong>Percentage of Range for {label1}:</strong> {percentRange1}%
         </div>
 
         {/* Color 1 */}
@@ -117,7 +127,9 @@ function App() {
 
         {/* Combo Counter for Color 2 */}
         <div className="mb-4 p-2 border border-gray-200 rounded bg-gray-50">
-          <strong>Total Combos for {label2}:</strong> {calculateCombosForColor('color2')}
+          <strong>Total Combos for {label2}:</strong> {totalCombos2} combos
+          <br />
+          <strong>Percentage of Range for {label2}:</strong> {percentRange2}%
         </div>
 
         {/* Color 2 */}
