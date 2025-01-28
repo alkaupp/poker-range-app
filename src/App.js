@@ -1,29 +1,48 @@
 import React, { useState } from 'react';
-import HandCell from './components/HandCell'; // Assuming the HandCell component is in HandCell.jsx
-import hands from './utils/hands';
+import HandCell from './components/HandCell';
+import hands from './utils/hands'; // Import hands array
 
 function App() {
-	document.title = 'Poker hand visualizer'
-  // State to store the selected hand
-  const [selectedHand, setSelectedHand] = useState(null);
+  document.title = 'Poker hand visualizer';
 
-  // State to store colors and proportions for all hands
+  // State for selected hand and hand settings
+  const [selectedHand, setSelectedHand] = useState(null);
   const [handSettings, setHandSettings] = useState({});
-  
-  // State to store the selected colors and proportions
+
+  // State for color and proportion settings
   const [colorSettings, setColorSettings] = useState({ color1: '#ff0000', color2: '#00ff00', proportion1: 50, proportion2: 50 });
-    // State to store editable labels
   const [label1, setLabel1] = useState('Color 1');
   const [label2, setLabel2] = useState('Color 2');
 
-  // Handle hand click - Apply the selected color and proportions
+  // Calculate total selected combos for a specific color
+  const calculateCombosForColor = (color) => {
+    let totalCombos = 0;
+
+    for (const hand in handSettings) {
+      const { proportion1, proportion2 } = handSettings[hand] || {};
+      const percentage = color === 'color1' ? parseInt(proportion1, 10) : parseInt(proportion2, 10);
+
+      // Calculate combos based on hand type
+      if (hand.endsWith('o')) {
+        totalCombos += 12 * (percentage / 100); // Offsuit hands
+      } else if (hand.endsWith('s')) {
+        totalCombos += 4 * (percentage / 100); // Suited hands
+      } else {
+        totalCombos += 6 * (percentage / 100); // Pairs
+      }
+    }
+
+    return totalCombos.toFixed(1); // Round to 1 decimal for clarity
+  };
+
+  // Handle hand selection
   const handleHandClick = (hand) => {
-    setSelectedHand(hand); // Set selected hand
+    setSelectedHand(hand);
 
     // Apply selected colors and proportions to the hand
     setHandSettings({
       ...handSettings,
-      [hand]: { ...colorSettings }
+      [hand]: { ...colorSettings },
     });
   };
 
@@ -33,14 +52,8 @@ function App() {
     setColorSettings(updatedColorSettings);
   };
 
-  // Handle proportion changes from range slider
-  const handleProportionSliderChange = (e, color) => {
-    const updatedColorSettings = { ...colorSettings, [color]: e.target.value };
-    setColorSettings(updatedColorSettings);
-  };
-
-  // Handle proportion changes from text input
-  const handleProportionTextChange = (e, color) => {
+  // Handle proportion changes
+  const handleProportionChange = (e, color) => {
     const updatedColorSettings = { ...colorSettings, [color]: e.target.value };
     setColorSettings(updatedColorSettings);
   };
@@ -64,9 +77,14 @@ function App() {
       <div className="ml-4 p-4 border border-gray-300 rounded-md">
         <h2 className="font-bold text-xl mb-4">Select Colors and Proportions</h2>
 
+        {/* Combo Counter for Color 1 */}
+        <div className="mb-4 p-2 border border-gray-200 rounded bg-gray-50">
+          <strong>Total Combos for {label1}:</strong> {calculateCombosForColor('color1')}
+        </div>
+
         {/* Color 1 */}
         <div>
-        <input
+          <input
             type="text"
             value={label1}
             onChange={(e) => setLabel1(e.target.value)}
@@ -82,7 +100,7 @@ function App() {
             type="range"
             min="0"
             max="100"
-            onChange={(e) => handleProportionSliderChange(e, 'proportion1')}
+            onChange={(e) => handleProportionChange(e, 'proportion1')}
             className="w-full mb-4"
             value={colorSettings.proportion1}
           />
@@ -90,16 +108,21 @@ function App() {
             type="number"
             min="0"
             max="100"
-            onChange={(e) => handleProportionTextChange(e, 'proportion1')}
+            onChange={(e) => handleProportionChange(e, 'proportion1')}
             className="w-full mb-4 p-2 border"
             value={colorSettings.proportion1}
           />
           <span>{colorSettings.proportion1}%</span>
         </div>
 
+        {/* Combo Counter for Color 2 */}
+        <div className="mb-4 p-2 border border-gray-200 rounded bg-gray-50">
+          <strong>Total Combos for {label2}:</strong> {calculateCombosForColor('color2')}
+        </div>
+
         {/* Color 2 */}
         <div>
-        <input
+          <input
             type="text"
             value={label2}
             onChange={(e) => setLabel2(e.target.value)}
@@ -115,7 +138,7 @@ function App() {
             type="range"
             min="0"
             max="100"
-            onChange={(e) => handleProportionSliderChange(e, 'proportion2')}
+            onChange={(e) => handleProportionChange(e, 'proportion2')}
             className="w-full mb-4"
             value={colorSettings.proportion2}
           />
@@ -123,7 +146,7 @@ function App() {
             type="number"
             min="0"
             max="100"
-            onChange={(e) => handleProportionTextChange(e, 'proportion2')}
+            onChange={(e) => handleProportionChange(e, 'proportion2')}
             className="w-full mb-4 p-2 border"
             value={colorSettings.proportion2}
           />
