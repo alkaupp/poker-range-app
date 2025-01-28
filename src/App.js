@@ -15,8 +15,6 @@ function App() {
   const [colorSettings, setColorSettings] = useState({ color1: '#ff0000', color2: '#00ff00', proportion1: 50, proportion2: 50 });
   const [label1, setLabel1] = useState('Color 1');
   const [label2, setLabel2] = useState('Color 2');
-  const [title1, setTitle1] = useState('Range 1 Title'); // Title for Color 1
-  const [title2, setTitle2] = useState('Range 2 Title'); // Title for Color 2
   const [gridTitle, setGridTitle] = useState('Custom Range Grid Title'); // Title for range grid
 
   // Helper function to calculate the total combos for a specific color
@@ -76,9 +74,9 @@ function App() {
         {/* Hand Grid Column */}
         <div className="flex-1">
           {/* Range Grid Title (Above the grid) */}
-          <h2 className="text-2xl font-semibold mb-4">{gridTitle}</h2> {/* Display custom title */}
+          <h2 className="text-4xl font-semibold mt-2 ml-2">{gridTitle}</h2> {/* Display custom title */}
 
-          <div className="grid grid-cols-13 gap-1" style={{ marginTop: '30px' }}>
+          <div className="grid grid-cols-13 gap-1">
             {hands.map((hand) => (
               <HandCell
                 key={hand}
