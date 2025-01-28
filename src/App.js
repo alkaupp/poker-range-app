@@ -40,15 +40,25 @@ function App() {
     return { totalCombos: totalCombos.toFixed(2), percentageOfRange };
   };
 
-  // Handle hand selection
   const handleHandClick = (hand) => {
-    setSelectedHand(hand);
-
-    // Apply selected colors and proportions to the hand
-    setHandSettings({
-      ...handSettings,
-      [hand]: { ...colorSettings },
-    });
+    // Check if the hand already has the selected color settings
+    if (handSettings[hand] && 
+        handSettings[hand].color1 === colorSettings.color1 && 
+        handSettings[hand].color2 === colorSettings.color2 &&
+        handSettings[hand].proportion1 === colorSettings.proportion1 &&
+        handSettings[hand].proportion2 === colorSettings.proportion2) {
+      // If the hand already has the selected colors, reset to default (remove from settings)
+      const updatedHandSettings = { ...handSettings };
+      delete updatedHandSettings[hand]; // Remove the hand's color settings
+      setHandSettings(updatedHandSettings); // Update the state
+    } else {
+      // Otherwise, apply the selected colors
+      setSelectedHand(hand);
+      setHandSettings({
+        ...handSettings,
+        [hand]: { ...colorSettings }
+      });
+    }
   };
 
   // Handle color changes
