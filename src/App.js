@@ -80,11 +80,11 @@ function App() {
   return (
     <div className="flex flex-col items-center"> {/* Center content for the grid and title */}
       
-      <div className="flex w-full justify-between"> {/* Two columns layout */}
+      <div className="flex justify-between"> {/* Two columns layout */}
         {/* Hand Grid Column */}
         <div className="flex-1">
           {/* Range Grid Title (Above the grid) */}
-          <h2 className="text-4xl font-semibold mt-2 ml-2">{gridTitle}</h2> {/* Display custom title */}
+          <h2 className="text-4xl font-semibold mt-2 ml-2 mb-1">{gridTitle}</h2> {/* Display custom title */}
 
           <div className="grid grid-cols-13 gap-1">
             {hands.map((hand) => (
