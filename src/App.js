@@ -51,6 +51,9 @@ function App() {
   
   // State to store the selected colors and proportions
   const [colorSettings, setColorSettings] = useState({ color1: '#ff0000', color2: '#00ff00', proportion1: 50, proportion2: 50 });
+    // State to store editable labels
+  const [label1, setLabel1] = useState('Color 1');
+  const [label2, setLabel2] = useState('Color 2');
 
   // Handle hand click - Apply the selected color and proportions
   const handleHandClick = (hand) => {
@@ -102,7 +105,12 @@ function App() {
 
         {/* Color 1 */}
         <div>
-          <label className="block mb-2">Color 1</label>
+        <input
+            type="text"
+            value={label1}
+            onChange={(e) => setLabel1(e.target.value)}
+            className="block mb-2 p-2 border border-gray-300 rounded"
+          />
           <input
             type="color"
             onChange={(e) => handleColorChange(e, 'color1')}
@@ -130,7 +138,12 @@ function App() {
 
         {/* Color 2 */}
         <div>
-          <label className="block mb-2">Color 2</label>
+        <input
+            type="text"
+            value={label2}
+            onChange={(e) => setLabel2(e.target.value)}
+            className="block mb-2 p-2 border border-gray-300 rounded"
+          />
           <input
             type="color"
             onChange={(e) => handleColorChange(e, 'color2')}
