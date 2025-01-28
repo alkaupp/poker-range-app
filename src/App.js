@@ -15,6 +15,9 @@ function App() {
   const [colorSettings, setColorSettings] = useState({ color1: '#ff0000', color2: '#00ff00', proportion1: 50, proportion2: 50 });
   const [label1, setLabel1] = useState('Color 1');
   const [label2, setLabel2] = useState('Color 2');
+  const [title1, setTitle1] = useState('Range 1 Title'); // Title for Color 1
+  const [title2, setTitle2] = useState('Range 2 Title'); // Title for Color 2
+  const [gridTitle, setGridTitle] = useState('Custom Range Grid Title'); // Title for range grid
 
   // Helper function to calculate the total combos for a specific color
   const calculateCombosForColor = (color) => {
@@ -67,112 +70,131 @@ function App() {
   const { totalCombos: totalCombos2, percentageOfRange: percentRange2 } = calculateCombosForColor('color2');
 
   return (
-    <div className="flex">
-      {/* Hand grid */}
-      <div className="grid grid-cols-13 gap-1" style={{ marginTop: '100px', marginLeft: '20px' }}>
-        {hands.map((hand) => (
-          <HandCell
-            key={hand}
-            hand={hand}
-            colors={handSettings[hand] ? handSettings[hand] : null}
-            onClick={() => handleHandClick(hand)}
-            isSelected={hand === selectedHand}
-          />
-        ))}
-      </div>
+    <div className="flex flex-col items-center"> {/* Center content for the grid and title */}
+      
+      <div className="flex w-full justify-between"> {/* Two columns layout */}
+        {/* Hand Grid Column */}
+        <div className="flex-1">
+          {/* Range Grid Title (Above the grid) */}
+          <h2 className="text-2xl font-semibold mb-4">{gridTitle}</h2> {/* Display custom title */}
 
-      {/* Color Picker and Proportions */}
-      <div className="ml-4 p-4 border border-gray-300 rounded-md">
-        <h2 className="font-bold text-xl mb-4">Select Colors and Proportions</h2>
-
-        {/* Combo Counter for Color 1 */}
-        <div className="mb-4 p-2 border border-gray-200 rounded bg-gray-50">
-          <strong>Total Combos for {label1}:</strong> {totalCombos1} combos
-          <br />
-          <strong>Percentage of Range for {label1}:</strong> {percentRange1}%
+          <div className="grid grid-cols-13 gap-1" style={{ marginTop: '30px' }}>
+            {hands.map((hand) => (
+              <HandCell
+                key={hand}
+                hand={hand}
+                colors={handSettings[hand] ? handSettings[hand] : null}
+                onClick={() => handleHandClick(hand)}
+                isSelected={hand === selectedHand}
+              />
+            ))}
+          </div>
         </div>
 
-        {/* Color 1 */}
-        <div>
-          <input
-            type="text"
-            value={label1}
-            onChange={(e) => setLabel1(e.target.value)}
-            className="block mb-2 p-2 border border-gray-300 rounded"
-          />
-          <input
-            type="color"
-            onChange={(e) => handleColorChange(e, 'color1')}
-            className="mb-4"
-            value={colorSettings.color1}
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            onChange={(e) => handleProportionChange(e, 'proportion1')}
-            className="w-full mb-4"
-            value={colorSettings.proportion1}
-          />
-          <input
-            type="number"
-            min="0"
-            max="100"
-            onChange={(e) => handleProportionChange(e, 'proportion1')}
-            className="w-full mb-4 p-2 border"
-            value={colorSettings.proportion1}
-          />
-          <span>{colorSettings.proportion1}%</span>
-        </div>
+        {/* Color Selection Column */}
+        <div className="w-1/3 pl-4">
+          <div className="mt-8 p-4 border border-gray-300 rounded-md">
+            
+            {/* Range Grid Title Input */}
+            <div className="mb-4">
+              <input
+                type="text"
+                value={gridTitle}
+                onChange={(e) => setGridTitle(e.target.value)}
+                className="block w-full mb-4 p-2 border border-gray-300 rounded"
+                placeholder="Enter custom range grid title"
+              />
+            </div>
 
-        {/* Combo Counter for Color 2 */}
-        <div className="mb-4 p-2 border border-gray-200 rounded bg-gray-50">
-          <strong>Total Combos for {label2}:</strong> {totalCombos2} combos
-          <br />
-          <strong>Percentage of Range for {label2}:</strong> {percentRange2}%
-        </div>
+            <h2 className="font-bold text-xl mb-4">Select Colors and Proportions</h2>
 
-        {/* Color 2 */}
-        <div>
-          <input
-            type="text"
-            value={label2}
-            onChange={(e) => setLabel2(e.target.value)}
-            className="block mb-2 p-2 border border-gray-300 rounded"
-          />
-          <input
-            type="color"
-            onChange={(e) => handleColorChange(e, 'color2')}
-            className="mb-4"
-            value={colorSettings.color2}
-          />
-          <input
-            type="range"
-            min="0"
-            max="100"
-            onChange={(e) => handleProportionChange(e, 'proportion2')}
-            className="w-full mb-4"
-            value={colorSettings.proportion2}
-          />
-          <input
-            type="number"
-            min="0"
-            max="100"
-            onChange={(e) => handleProportionChange(e, 'proportion2')}
-            className="w-full mb-4 p-2 border"
-            value={colorSettings.proportion2}
-          />
-          <span>{colorSettings.proportion2}%</span>
-        </div>
+            {/* Combo Counter for Color 1 */}
+            <div className="mb-4 p-2 border border-gray-200 rounded bg-gray-50">
+              <strong>Total Combos for {label1}:</strong> {totalCombos1} combos
+              <br />
+              <strong>Percentage of Range for {label1}:</strong> {percentRange1}%
+            </div>
 
-        {/* Clear Selection Button */}
-        <div>
-          <button
-            onClick={() => setHandSettings({})} // Clear all hand settings
-            className="mt-4 py-2 px-4 bg-red-500 text-white rounded-md"
-          >
-            Clear All Hands
-          </button>
+            {/* Color 1 */}
+            <div>
+              <input
+                type="text"
+                value={label1}
+                onChange={(e) => setLabel1(e.target.value)}
+                className="block mb-2 p-2 border border-gray-300 rounded"
+              />
+              <input
+                type="color"
+                onChange={(e) => handleColorChange(e, 'color1')}
+                className="mb-4"
+                value={colorSettings.color1}
+              />
+              <input
+                type="range"
+                min="0"
+                max="100"
+                onChange={(e) => handleProportionChange(e, 'proportion1')}
+                className="w-full mb-4"
+                value={colorSettings.proportion1}
+              />
+              <input
+                type="number"
+                min="0"
+                max="100"
+                onChange={(e) => handleProportionChange(e, 'proportion1')}
+                className="w-full mb-4 p-2 border"
+                value={colorSettings.proportion1}
+              />
+            </div>
+            {/* Combo Counter for Color 2 */}
+            <div className="mb-4 p-2 border border-gray-200 rounded bg-gray-50">
+              <strong>Total Combos for {label2}:</strong> {totalCombos2} combos
+              <br />
+              <strong>Percentage of Range for {label2}:</strong> {percentRange2}%
+            </div>
+
+            {/* Color 2 */}
+            <div>
+              <input
+                type="text"
+                value={label2}
+                onChange={(e) => setLabel2(e.target.value)}
+                className="block mb-2 p-2 border border-gray-300 rounded"
+              />
+              <input
+                type="color"
+                onChange={(e) => handleColorChange(e, 'color2')}
+                className="mb-4"
+                value={colorSettings.color2}
+              />
+              <input
+                type="range"
+                min="0"
+                max="100"
+                onChange={(e) => handleProportionChange(e, 'proportion2')}
+                className="w-full mb-4"
+                value={colorSettings.proportion2}
+              />
+              <input
+                type="number"
+                min="0"
+                max="100"
+                onChange={(e) => handleProportionChange(e, 'proportion2')}
+                className="w-full mb-4 p-2 border"
+                value={colorSettings.proportion2}
+              />
+            </div>
+
+            {/* Clear Selection Button */}
+            <div>
+              <button
+                onClick={() => setHandSettings({})} // Clear all hand settings
+                className="mt-4 py-2 px-4 bg-red-500 text-white rounded-md"
+              >
+                Clear All Hands
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
