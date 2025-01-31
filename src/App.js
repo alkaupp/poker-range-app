@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import HandCell from './components/HandCell'; // Assuming the HandCell component is in HandCell.jsx
 import hands from './utils/hands'; // Import hands array
+import { Helmet } from 'react-helmet';
 
 const TOTAL_COMBOS = 1326; // Total combos in the range
 
 function App() {
-  document.title = 'Poker hand visualizer';
-
+  document.title = 'RangeCraft - Poker Range Visualizer';
   // State for selected hand and hand settings
   const [selectedHand, setSelectedHand] = useState(null);
   const [handSettings, setHandSettings] = useState({});
@@ -78,8 +78,16 @@ function App() {
   const { totalCombos: totalCombos2, percentageOfRange: percentRange2 } = calculateCombosForColor('color2');
 
   return (
+    <>
+      <Helmet>
+        <title>RangeCraft - Poker Range Visualizer</title>
+        <meta name="description" content="Visualize and customize poker hand ranges easily." />
+        <meta property="og:title" content="RangeCraft - Poker Range Visualizer" />
+        <meta property="og:description" content="A tool to visualize and customize poker hand ranges with colors and mixes." />
+        <meta property="og:url" content="https://rangecraft.poker" />
+        <meta property="og:type" content="website" />
+      </Helmet>
     <div className="flex flex-col items-center"> {/* Center content for the grid and title */}
-      
       <div className="flex justify-between"> {/* Two columns layout */}
         {/* Hand Grid Column */}
         <div className="flex-1">
@@ -206,6 +214,7 @@ function App() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 
